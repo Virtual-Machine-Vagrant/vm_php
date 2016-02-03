@@ -1,0 +1,3 @@
+[submodule "puphpet/puppet/modules/phpbrew"]
+	path = puphpet/puppet/modules/phpbrew
+	url = https://github.com/phpbrew/puppet-phpbrew.git

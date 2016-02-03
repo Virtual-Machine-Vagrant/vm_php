@@ -1,0 +1,15 @@
+# CONFIGURATION
+# fill out this configuration
+REMOTE_HOST=
+REMOTE_SSH_PORT=22			# default: 22
+REMOTE_SSH_USER=
+REMOTE_SSH_PASS=
+REMOTE_SQL_HOST=
+REMOTE_SQL_DB=
+REMOTE_SQL_USER=
+REMOTE_SQL_PASS=
+
+LOCAL_MYSQL_HOST=localhost	# default: localhost
+LOCAL_MYSQL_USER=root 		# default: root
+LOCAL_MYSQL_PASS=house      # default: house
+LOCAL_MYSQL_DB=project      # default: project

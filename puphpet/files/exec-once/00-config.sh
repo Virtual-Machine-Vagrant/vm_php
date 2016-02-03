@@ -1,0 +1,1 @@
+source /vagrant/config.sh
