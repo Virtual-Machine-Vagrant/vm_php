@@ -26,10 +26,17 @@ install_php() {
 	   XDEBUG_VERSION=2.2.7 
 	fi
 	install_php_ext xdebug $XDEBUG_VERSION
+
 	echo "---------------------------------------------"
 	echo "installing extension: gd"
 	echo "---------------------------------------------"
 	install_php_ext gd
+
+	echo "---------------------------------------------"
+	echo "installing extension: mongo"
+	echo "---------------------------------------------"
+	install_php_ext mongo
+
 	echo "---------------------------------------------"
 	echo "installing extension ioncube"
 	echo "---------------------------------------------"
@@ -48,12 +55,21 @@ install_php() {
 	echo "starting FPM"
 	echo "---------------------------------------------"
 	service php5-fpm stop
-	phpbrew fpm start
+	phpbrew fpm restart
 }
 
 install_php_ext() {
 	phpbrew ext clean --purge $1 $2
 	phpbrew ext install $1 $2
+
+	string=$(phpbrew extension show $1 | grep 'Loaded')
+	if printf -- '%s' "$string" | egrep -q -- "no"
+		then
+			echo "---------------------------------------------"
+			echo "Enabling extension $1"
+			echo "---------------------------------------------"
+			phpbrew extension enable $1
+	fi
 }
 
 switch_php() {
