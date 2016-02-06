@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 FILE=/etc/elasticsearch/es-01/elasticsearch.yml
 
 LINE="network.bind_host: 0"
