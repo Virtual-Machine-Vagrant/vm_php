@@ -1,6 +1,6 @@
 # House.local - php vm for web-doctors!
 
-This awesome vm is powered by a bunch cool and free community tools. It serves you a vagrant-box with a multi-version php environment powered by phpbrew.
+This awesome vm is powered by a bunch of cool and free community tools. It serves you a vagrant-box with a multi-version php environment powered by phpbrew.
 
 ## Getting started
 This vm is powered by vagrant, so you can use all vagrant-related commands to start, stop and maintain your vagrant-box.
@@ -48,4 +48,6 @@ If your want to install PHP `5.4` and `5.5` it will look like:
 After that you have to run `vagrant provision`.
 
 ## How to change to a specific PHP version?
-t.b.d.
+Connect via ssh to `house.local` and run `sudo -i` to act as `root`. After that run `phpbrew list` and you will see a list of installed php-packages.
+
+If you want to switch to `5.5.31` for example, just run `phpbrew switch 5.5.31` and then `phpbrew fpm restart`. That's it.
