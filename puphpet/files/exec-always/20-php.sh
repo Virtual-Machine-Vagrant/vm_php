@@ -59,7 +59,6 @@ install_php() {
 }
 
 install_php_ext() {
-	phpbrew ext clean --purge $1 $2
 	phpbrew ext install $1 $2
 
 	string=$(phpbrew extension show $1 | grep 'Loaded')
