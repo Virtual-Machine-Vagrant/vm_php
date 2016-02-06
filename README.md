@@ -2,7 +2,7 @@
 
 This awesome vm is powered by a bunch cool and free community tools. It serves you a vagrant-box with a multi-version php environment powered by phpbrew.
 
-## Get started
+## Getting started
 This vm is powered by vagrant, so you can use all vagrant-related commands to start, stop and maintain your vagrant-box.
 
 1. `git clone https://github.com/roman-1983/vm_php.git` 
@@ -13,6 +13,16 @@ This vm is powered by vagrant, so you can use all vagrant-related commands to st
         192.168.56.101   project.local
 
 4. Fire up your browser to http://house.local
+5. Connect via `vagrant ssh` to run console
+
+## Connect via ssh to house.local
+You can simply connect via `ssh vagrant@house.local`. The password is: `vagrant`
+If you want to connect through ssh-key, just add your public key to the vagrant-box with
+    
+    ssh-copy-id -i ~/.ssh/id_rsa.pub vagrant@house.local
+
+## Automatic registering of vagrant hostname in hosts-file
+You could run `vagrant plugin install vagrant-hostsupdater` to install the host-updateplugin (https://github.com/cogitatio/vagrant-hostsupdater).
 
 ## Features
 t.b.d.
