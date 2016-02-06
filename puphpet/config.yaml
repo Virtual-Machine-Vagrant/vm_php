@@ -389,7 +389,7 @@ mariadb:
         version: '10.1'
         root_password: house
         override_options: {  }
-    adminer: '1'
+    adminer: '0'
     users:
         mariadbnu_jtqw9gr34qdg:
             name: project
