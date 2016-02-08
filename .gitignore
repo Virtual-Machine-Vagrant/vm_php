@@ -1,4 +1,5 @@
 !.gitkeep
+house.local/tools
 project.local/
 puphpet/config-custom.yaml
 scripts/config.sh
