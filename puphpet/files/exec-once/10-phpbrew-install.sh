@@ -1,4 +1,5 @@
-# system wide installation of phpbrew 
+#!/bin/sh
+# system wide installation of phpbrew
 echo "---------------------------------------------"
 echo "Downloading phpbrew"
 echo "---------------------------------------------"

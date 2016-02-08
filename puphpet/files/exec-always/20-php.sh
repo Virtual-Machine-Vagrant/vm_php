@@ -5,6 +5,8 @@ install_php() {
 	PHP_MAJOR_VERSION=$(echo $PHPVERSION| cut -d'.' -f 1)
 	PHP_MINOR_VERSION=$(echo $PHPVERSION| cut -d'.' -f 2)
 	PHP_VERSION_MM=$PHP_MAJOR_VERSION.$PHP_MINOR_VERSION
+	JOBS=$(nproc)
+
 	echo "---------------------------------------------"
 	echo "installation of php via homebrew"
 	echo "VERSION: $PHP_VERSION_MM ($PHPVERSION)"
@@ -12,10 +14,11 @@ install_php() {
 	echo "MINOR VERSION: $PHP_MINOR_VERSION"
 	echo "---------------------------------------------"
 	source /etc/profile.d/phpbrew.sh
-	phpbrew install --no-clean $PHPVERSION +default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
+	phpbrew install --no-clean --jobs=$JOBS $PHPVERSION +default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
 	echo "---------------------------------------------"
 	echo "switching to php-version $PHPVERSION"
 	echo "---------------------------------------------"
+	source /etc/profile.d/phpbrew.sh
 	phpbrew switch $PHPVERSION
 	echo "---------------------------------------------"
 	echo "installing extension: xdebug"
@@ -40,14 +43,14 @@ install_php() {
 	echo "---------------------------------------------"
 	echo "installing extension ioncube"
 	echo "---------------------------------------------"
-	LINE="zend_extension=/vagrant/puphpet/files/install/ioncube/ioncube_loader_lin_$PHP_VERSION_MM.so"
+	LINE="zend_extension=/opt/ioncube/ioncube_loader_lin_$PHP_VERSION_MM.so"
 	FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/00-ioncube.ini
 	touch $FILE
 	grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 	echo "---------------------------------------------"
 	echo "installing extension: zend guard loader"
 	echo "---------------------------------------------"
-	LINE="zend_extension=/vagrant/puphpet/files/install/zendguard/php$PHP_VERSION_MM/ZendGuardLoader.so"
+	LINE="zend_extension=/opt/zendguard/php$PHP_VERSION_MM/ZendGuardLoader.so"
 	FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/10-zendguardloader.ini
 	touch $FILE
 	grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
@@ -78,6 +81,17 @@ switch_php() {
 	phpbrew switch $1
 }
 
+install_zendguardAndIoncube() {
+	echo "---------------------------------------------"
+	echo "Copying Zendguard and Ioncube files"
+	echo "---------------------------------------------"
+  rm -rf /opt/zendguard
+  rm -rf /opt/ioncube
+  cp -rf /vagrant/puphpet/files/install/* /opt
+}
+
+
+install_zendguardAndIoncube
 for i in ${HOUSE_PHP_VERSIONS[@]}; do
 	install_php $i
 done

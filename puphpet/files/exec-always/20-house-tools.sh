@@ -1,3 +1,4 @@
+#!/bin/sh
 rm -rf /var/www/html
 HOUSE_PATH=/var/www/house.local
 echo "---------------------------------------------"
