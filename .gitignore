@@ -1,6 +1,4 @@
 !.gitkeep
-house.local/adminer
-house.local/genghis
 project.local/
 puphpet/config-custom.yaml
 scripts/config.sh
