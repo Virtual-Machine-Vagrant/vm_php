@@ -5,7 +5,7 @@ vagrantfile:
         box_url: puphpet/debian75-x64
         hostname: house.local
         memory: '2048'
-        cpus: '1'
+        cpus: '2'
         chosen_provider: virtualbox
         box_version: ''
         network:
@@ -211,7 +211,7 @@ apache:
         - proxy_fcgi
         - rewrite
     vhosts:
-        av_qmiwjppv8jkk:
+        vhost_house_local:
             servername: house.local
             serveraliases:
                 - www.house.local
@@ -248,7 +248,7 @@ apache:
                             custom_fragment: ''
                             provider: filesmatch
                     provider: directory
-        av_zv0yn0t8sins:
+        vhost_project_local:
             servername: project.local
             serveraliases:
                 - www.project.local
@@ -256,6 +256,7 @@ apache:
             port: '80'
             setenv:
                 - 'APP_ENV dev'
+                - 'SHOPWARE_ENV local'
             setenvif:
                 - 'Authorization "(.*)" HTTP_AUTHORIZATION=$1'
             custom_fragment: ''
@@ -306,7 +307,7 @@ php:
         display_errors: 'On'
         error_reporting: 'E_ALL & ~E_STRICT'
         session.save_path: /var/lib/php/session
-        date.timezone: Europe/Berlin
+        date.timezone: 'Europe/Berlin'
         allow_url_fopen: '1'
         allow_url_include: '1'
     fpm_ini:
