@@ -14,7 +14,14 @@ install_php() {
 	echo "MINOR VERSION: $PHP_MINOR_VERSION"
 	echo "---------------------------------------------"
 	source /etc/profile.d/phpbrew.sh
-	phpbrew install --jobs=$JOBS --no-clean $PHPVERSION +default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
+
+	PHP_MODULES="+default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip"
+	if [ $PHP_VERSION_MM == 5.5 ] || [ $PHP_VERSION_MM == 5.6 ]
+	then
+	   PHP_MODULES="$PHP_MODULES +opcache"
+	fi
+
+	phpbrew install --jobs=$JOBS $PHPVERSION $PHP_MODULES -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
 	echo "---------------------------------------------"
 	echo "switching to php-version $PHPVERSION"
 	echo "---------------------------------------------"
@@ -62,12 +69,6 @@ install_php() {
 		touch $FILE
 		grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 	fi
-
-	echo "---------------------------------------------"
-	echo "starting FPM"
-	echo "---------------------------------------------"
-	service php5-fpm stop
-	phpbrew fpm restart
 }
 
 install_php_ext() {
@@ -87,7 +88,9 @@ switch_php() {
 	echo "---------------------------------------------"
 	echo "switching to php-version $1"
 	echo "---------------------------------------------"
-	phpbrew switch $1
+        phpbrew fpm stop
+		phpbrew switch $1
+        phpbrew fpm start
 }
 
 install_zendguardAndIoncube() {
@@ -104,7 +107,7 @@ tar -zxf ioncube_loaders_lin_x86-64.tar.gz
 rm ioncube_loaders_lin_x86-64.tar.gz
 }
 
-
+service php5-fpm stop
 install_zendguardAndIoncube
 for i in ${HOUSE_PHP_VERSIONS[@]}; do
 	install_php $i

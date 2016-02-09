@@ -19,3 +19,4 @@ grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 LINE="http.cors.allow-origin : '*'"
 grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 
+service elasticsearch-es-01 restart
