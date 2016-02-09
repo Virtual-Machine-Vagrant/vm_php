@@ -14,7 +14,8 @@ install_php() {
 	echo "MINOR VERSION: $PHP_MINOR_VERSION"
 	echo "---------------------------------------------"
 	source /etc/profile.d/phpbrew.sh
-	phpbrew install --no-clean --jobs=$JOBS $PHPVERSION +default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
+	phpbrew remove $PHPVERSION
+	phpbrew install --jobs=$JOBS $PHPVERSION +default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
 	echo "---------------------------------------------"
 	echo "switching to php-version $PHPVERSION"
 	echo "---------------------------------------------"
@@ -54,6 +55,15 @@ install_php() {
 	FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/10-zendguardloader.ini
 	touch $FILE
 	grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+
+	if [ $PHP_VERSION_MM == 5.5 ] || [ $PHP_VERSION_MM == 5.6 ]
+	then
+	   LINE="zend_extension=/opt/zendguard/php$PHP_VERSION_MM/opcache.so"
+		FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/11-zend_opcache.ini
+		touch $FILE
+		grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+	fi
+
 	echo "---------------------------------------------"
 	echo "starting FPM"
 	echo "---------------------------------------------"

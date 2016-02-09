@@ -2,10 +2,11 @@
 rm -rf /var/www/html
 HOUSE_PATH=/var/www/house.local
 HOUSE_TOOLS_PATH=/var/www/house.local/tools
-mkdir -p $HOUSE_TOOLS_PATH
 echo "---------------------------------------------"
 echo "Installtion tools into $HOUSE_TOOLS_PATH"
 echo "---------------------------------------------"
+rm -rf $HOUSE_TOOLS_PATH
+mkdir -p $HOUSE_TOOLS_PATH
 
 echo "---------------------------------------------"
 echo "Elasticsearch: Installing elasticsearch HQ"
