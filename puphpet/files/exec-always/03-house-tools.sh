@@ -12,7 +12,7 @@ echo "---------------------------------------------"
 echo "Elasticsearch: Installing elasticsearch HQ"
 echo "---------------------------------------------"
 cd $HOUSE_TOOLS_PATH
-git clone https://github.com/royrusso/elasticsearch-HQ.git
+git clone https://github.com/royrusso/elasticsearch-HQ.git > /dev/null 2>&1
 
 echo "---------------------------------------------"
 echo "MongoDB: Installing genghis"
@@ -20,7 +20,7 @@ echo "---------------------------------------------"
 GENGHIS_PATH=$HOUSE_TOOLS_PATH/genghis
 mkdir -p $GENGHIS_PATH
 cd $GENGHIS_PATH
-wget https://raw.githubusercontent.com/bobthecow/genghis/master/genghis.php
+wget https://raw.githubusercontent.com/bobthecow/genghis/master/genghis.php > /dev/null 2>&1
 
 echo "---------------------------------------------"
 echo "MySQL: Installing adminer"
@@ -28,4 +28,4 @@ echo "---------------------------------------------"
 ADMINER_PATH=$HOUSE_TOOLS_PATH/adminer
 mkdir -p $ADMINER_PATH
 cd $ADMINER_PATH
-wget https://www.adminer.org/latest-mysql.php
+wget https://www.adminer.org/latest-mysql.php > /dev/null 2>&1
