@@ -14,8 +14,7 @@ install_php() {
 	echo "MINOR VERSION: $PHP_MINOR_VERSION"
 	echo "---------------------------------------------"
 	source /etc/profile.d/phpbrew.sh
-	phpbrew remove $PHPVERSION
-	phpbrew install --jobs=$JOBS $PHPVERSION +default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
+	phpbrew install --jobs=$JOBS --no-clean $PHPVERSION +default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
 	echo "---------------------------------------------"
 	echo "switching to php-version $PHPVERSION"
 	echo "---------------------------------------------"
@@ -95,9 +94,14 @@ install_zendguardAndIoncube() {
 	echo "---------------------------------------------"
 	echo "Copying Zendguard and Ioncube files"
 	echo "---------------------------------------------"
-  rm -rf /opt/zendguard
-  rm -rf /opt/ioncube
-  cp -rf /vagrant/puphpet/files/install/* /opt
+cd /opt
+rm -rf /opt/zendguard
+rm -rf /opt/ioncube
+cp -rf /vagrant/puphpet/files/install/* /opt
+rm -rf /opt/ioncube
+wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+tar -zxf ioncube_loaders_lin_x86-64.tar.gz
+rm ioncube_loaders_lin_x86-64.tar.gz
 }
 
 
