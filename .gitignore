@@ -1,6 +1,6 @@
 !.gitkeep
-house.local/tools
-project.local/
 puphpet/config-custom.yaml
 scripts/config.sh
+!www/house.local
+www/
 .vagrant/

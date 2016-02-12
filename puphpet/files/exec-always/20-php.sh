@@ -21,7 +21,7 @@ install_php() {
 	   PHP_MODULES="$PHP_MODULES +opcache"
 	fi
 
-	phpbrew install --jobs=$JOBS $PHPVERSION $PHP_MODULES -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
+	phpbrew install --jobs=$JOBS --no-clean $PHPVERSION $PHP_MODULES -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
 	echo "---------------------------------------------"
 	echo "switching to php-version $PHPVERSION"
 	echo "---------------------------------------------"
@@ -47,6 +47,13 @@ install_php() {
 	echo "---------------------------------------------"
 	install_php_ext mongo
 
+	APCU_VERSION=stable
+	if [ $PHP_VERSION_MM == 5.3 ] || [ $PHP_VERSION_MM == 5.4 ] || [ $PHP_VERSION_MM == 5.5 ] || [ $PHP_VERSION_MM == 5.6 ] 
+	then
+	   APCU_VERSION=4.0.10 
+	fi
+	install_php_ext apcu $APCU_VERSION
+
 	echo "---------------------------------------------"
 	echo "installing extension ioncube"
 	echo "---------------------------------------------"
@@ -54,6 +61,7 @@ install_php() {
 	FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/00-ioncube.ini
 	touch $FILE
 	grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+
 	echo "---------------------------------------------"
 	echo "installing extension: zend guard loader"
 	echo "---------------------------------------------"
@@ -62,12 +70,12 @@ install_php() {
 	touch $FILE
 	grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 
+	echo "---------------------------------------------"
+	echo "installing extension: opcache"
+	echo "---------------------------------------------"
 	if [ $PHP_VERSION_MM == 5.5 ] || [ $PHP_VERSION_MM == 5.6 ]
 	then
-	   LINE="zend_extension=/opt/zendguard/php$PHP_VERSION_MM/opcache.so"
-		FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/11-zend_opcache.ini
-		touch $FILE
-		grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+	   install_php_ext opcache
 	fi
 }
 
@@ -95,16 +103,18 @@ switch_php() {
 
 install_zendguardAndIoncube() {
 	echo "---------------------------------------------"
-	echo "Copying Zendguard and Ioncube files"
+	echo "Copying Zendguard files"
 	echo "---------------------------------------------"
-cd /opt
-rm -rf /opt/zendguard
-rm -rf /opt/ioncube
-cp -rf /vagrant/puphpet/files/install/* /opt
-rm -rf /opt/ioncube
-wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
-tar -zxf ioncube_loaders_lin_x86-64.tar.gz
-rm ioncube_loaders_lin_x86-64.tar.gz
+	cd /opt
+	rm -rf /opt/zendguard
+	rm -rf /opt/ioncube
+	cp -rf /vagrant/puphpet/files/install/zendguard /opt
+	echo "---------------------------------------------"
+	echo "Downloading Ioncube files"
+	echo "---------------------------------------------"
+	wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz > /dev/null 2>&1
+	tar -zxf ioncube_loaders_lin_x86-64.tar.gz
+	rm ioncube_loaders_lin_x86-64.tar.gz
 }
 
 service php5-fpm stop

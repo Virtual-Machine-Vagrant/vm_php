@@ -35,9 +35,9 @@ vagrantfile:
                     - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
         synced_folder:
             vflsf_ocy4q7ab7cse:
-                source: ./
+                source: ./www
                 target: /var/www
-                sync_type: default
+                sync_type: nfs
                 smb:
                     smb_host: ''
                     smb_username: ''
@@ -210,6 +210,8 @@ apache:
     modules:
         - proxy_fcgi
         - rewrite
+        - header
+        - vhost_alias
     vhosts:
         vhost_house_local:
             servername: house.local
@@ -243,44 +245,6 @@ apache:
                     custom_fragment: ''
                     files_match:
                         avdfm_0qmsjbt0wdbp:
-                            path: \.php$
-                            sethandler: 'proxy:fcgi://127.0.0.1:9000'
-                            custom_fragment: ''
-                            provider: filesmatch
-                    provider: directory
-        vhost_project_local:
-            servername: project.local
-            serveraliases:
-                - www.project.local
-            docroot: /var/www/project.local/web
-            port: '80'
-            setenv:
-                - 'APP_ENV dev'
-                - 'SHOPWARE_ENV local'
-            setenvif:
-                - 'Authorization "(.*)" HTTP_AUTHORIZATION=$1'
-            custom_fragment: ''
-            ssl: '0'
-            ssl_cert: ''
-            ssl_key: ''
-            ssl_chain: ''
-            ssl_certs_dir: ''
-            ssl_protocol: ''
-            ssl_cipher: ''
-            directories:
-                avd_p7fx2enxismn:
-                    path: /var/www/project.local
-                    options:
-                        - Indexes
-                        - FollowSymlinks
-                        - MultiViews
-                    allow_override:
-                        - All
-                    require:
-                        - 'all granted'
-                    custom_fragment: ''
-                    files_match:
-                        avdfm_qltpfewibibe:
                             path: \.php$
                             sethandler: 'proxy:fcgi://127.0.0.1:9000'
                             custom_fragment: ''
@@ -453,7 +417,7 @@ redis:
         port: '6379'
 sqlite:
     install: '1'
-    adminer: '1'
+    adminer: 0
     databases: {  }
 mailhog:
     install: '1'
@@ -464,7 +428,7 @@ mailhog:
         http_port: '8025'
         path: /usr/local/bin/mailhog
 beanstalkd:
-    install: '0'
+    install: '1'
     settings:
         listenaddress: 0.0.0.0
         listenport: '11300'
