@@ -1,16 +1,15 @@
 # House.local - php vm for web-doctors!
 
-This awesome vm is powered by a bunch of cool and free community tools. It serves you a vagrant-box with a multi-version php environment powered by phpbrew.
+This awesome vm is powered by a bunch of cool and free community tools. It serves you a vagrant-box with a multi-version php environment powered by phpbrew. This box serves projects via Apache 2 and PHP-FPM. Because of the the Apache Vhost-Alias setup you can simply drop in your project-files into domain-named folders and run them without setting up any vhosts in Apache or the Vagrant configfile.
 
 ## Getting started
-This vm is powered by vagrant, so you can use all vagrant-related commands to start, stop and maintain your vagrant-box.
+This vm is powered by Vagrant, so you can use all Vagrant-related commands to start, stop and maintain your Vagrant-box.
 
 1. `git clone https://github.com/roman-1983/vm_php.git` 
 2. `vagrant up`
-3. Put the following lines into your hosts-file: 
+3. Put the following line into your hosts-file: 
     
         192.168.56.101   house.local
-        192.168.56.101   project.local
 
 4. Fire up your browser to http://house.local
 5. Connect via `vagrant ssh` to run console
@@ -21,11 +20,10 @@ If you want to connect through ssh-key, just add your public key to the vagrant-
     
     ssh-copy-id -i ~/.ssh/id_rsa.pub vagrant@house.local
 
-## Automatic registering of vagrant hostname in hosts-file
-You could run `vagrant plugin install vagrant-hostsupdater` to install the host-updateplugin (https://github.com/cogitatio/vagrant-hostsupdater).
+## Creating a project
+`house.local` runs Apache's `vhost_alias` so simply create folder like `your-project.local` in the `www`-folder on your host-machine. Place a `index.html` in `your-project.local/web`. After you have set up a route in your `hosts`-file you can reach the new project via http://your-project.local.
 
-## Features
-t.b.d.
+`host.local` serves the public webfiles from the sub-directory `web` inside the project-folder, because some projects need a non-public area for storing application-data (e.g. Symfony).
 
 ## How to get the PHP versions?
 Enter `phpbrew known` on the console. You will get the following output
