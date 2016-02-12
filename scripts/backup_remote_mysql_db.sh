@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 if [ $1 ]
   then 
-    source $1.sh
+    source config/$1.sh
     echo "------------------------------------"
 	echo "Loaded config for: $1"
 	echo "------------------------------------"
