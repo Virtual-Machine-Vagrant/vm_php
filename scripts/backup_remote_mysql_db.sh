@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
-source config.sh
+if [ $1 ]
+  then 
+    source $1.sh
+    echo "------------------------------------"
+	echo "Loaded config for: $1"
+	echo "------------------------------------"
+  else 
+  	echo "No config loaded!"
+  	exit;
+fi
+
 
 # Set timestamp
 TIMESTAMP="$(date -u +%Y-%m-%d)"
