@@ -1,15 +1,49 @@
-# CONFIGURATION
-# fill out this configuration
+#!/usr/bin/env sh
+
+# Project name, also used for database-name
+LOCAL_PROJECT=
+
+# Project url (example: project.local)
+LOCAL_PROJECT_URL=${LOCAL_PROJECT}.local
+
+# Git-URL to clone a project (git@....)
+GIT_CLONE_URL=
+
+# Optional - if you want to overwrite the checkout-directory
+# GIT_CLONE_FOLDER=${LOCAL_PROJECT}
+
+# Remote Host
+# You must be able to authenticate via ssh-key with the remote-system
+# otherwise you will be prompted for the password many times!
 REMOTE_HOST=
-REMOTE_SSH_PORT=22			# default: 22
+
+# SSH-Port - Default: 22
+REMOTE_SSH_PORT=22
 REMOTE_SSH_USER=
-REMOTE_SSH_PASS=
 REMOTE_SQL_HOST=
 REMOTE_SQL_DB=
 REMOTE_SQL_USER=
 REMOTE_SQL_PASS=
 
-LOCAL_MYSQL_HOST=localhost	# default: localhost
-LOCAL_MYSQL_USER=root 		# default: root
-LOCAL_MYSQL_PASS=house      # default: house
-LOCAL_MYSQL_DB=project      # default: project
+# default: localhost
+LOCAL_MYSQL_HOST=localhost
+
+# default: root
+LOCAL_MYSQL_USER=root
+
+# default: house
+LOCAL_MYSQL_PASS=house
+
+# default: project
+LOCAL_MYSQL_DB=${LOCAL_PROJECT}
+
+# utf8_general_ci
+LOCAL_MYSQL_DB_COLLATION=utf8_general_ci
+
+declare -A RSYNC_FOLDERS
+
+# Copy & Uncomment the last line, if you want to add folders to sync
+# One folder per line
+#   XXXXXXX = Remote absolute path
+#   YYYYYYY = Local absolute path
+# RSYNC_FOLDERS[XXXXXXX]="/var/www/${LOCAL_PROJECT_URL}/web/YYYYYYY"

@@ -19,6 +19,10 @@ echo Copy Apache Config
 echo ---------------------------------------------
 
  cat <<EOT >> /etc/apache2/sites-available/30-dynamic-vhost.conf
+  <Directory "/var/www">
+   AllowOverride All
+   Allow from All
+ </Directory>
  <VirtualHost *:80>
    ServerName house.local
    ServerAlias *.local
@@ -26,7 +30,6 @@ echo ---------------------------------------------
 
    <Directory "/var/www/%0">
      Options Indexes FollowSymlinks MultiViews
-     AllowOverride All
      Require all granted
    </Directory>
    <FilesMatch "\.php$">
