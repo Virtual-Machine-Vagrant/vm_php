@@ -30,3 +30,8 @@ ADMINER_PATH=$HOUSE_TOOLS_PATH/adminer
 mkdir -p $ADMINER_PATH
 cd $ADMINER_PATH
 wget https://www.adminer.org/latest-mysql.php > /dev/null 2>&1
+
+echo "---------------------------------------------"
+echo "Beanstalk Web Interface"
+echo "---------------------------------------------"
+composer create-project ptrofimov/beanstalk_console -s dev ${HOUSE_TOOLS_PATH}/beanstalk
