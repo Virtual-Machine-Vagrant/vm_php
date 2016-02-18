@@ -16,12 +16,16 @@ cd $HOUSE_TOOLS_PATH
 git clone https://github.com/royrusso/elasticsearch-HQ.git > /dev/null 2>&1
 
 echo "---------------------------------------------"
-echo "MongoDB: Installing genghis"
+echo "MongoDB: Installing "
 echo "---------------------------------------------"
-GENGHIS_PATH=$HOUSE_TOOLS_PATH/genghis
-mkdir -p $GENGHIS_PATH
-cd $GENGHIS_PATH
-wget https://raw.githubusercontent.com/bobthecow/genghis/master/genghis.php > /dev/null 2>&1
+
+
+
+MONGODB_PATH=$HOUSE_TOOLS_PATH/mongoWebAdmin
+mkdir -p $MONGODB_PATH
+cd $MONGODB_PATH
+wget http://downloads.sourceforge.net/project/mongo-web-admin/mongoWebAdmin-beta6.tar.gz > /dev/null 2>&1
+tar -zxvf mongoWebAdmin-beta6.tar.gz
 
 echo "---------------------------------------------"
 echo "MySQL: Installing adminer"
