@@ -10,8 +10,8 @@ REQUIRED_PARAMETER=(LOCAL_PROJECT_URL GIT_CLONE_URL)
 source _require_parameters.sh
 
 SCRIPT_PATH="$(pwd)"
-mkdir -p /var/www/${LOCAL_PROJECT_URL}
-cd /var/www/${LOCAL_PROJECT_URL}
+mkdir -p "/var/www/${LOCAL_PROJECT_URL}"
+cd "/var/www/${LOCAL_PROJECT_URL}"
 
 if [ ! -d "/var/www/${LOCAL_PROJECT_URL}/${GIT_CLONE_FOLDER}" ]
   then

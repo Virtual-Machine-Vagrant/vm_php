@@ -40,6 +40,9 @@ LOCAL_MYSQL_DB=${LOCAL_PROJECT}
 # utf8_general_ci
 LOCAL_MYSQL_DB_COLLATION=utf8_general_ci
 
+# Exclude following tables from data-import (structure will be imported)
+EXCLUDED_TABLES=()
+
 declare -A RSYNC_FOLDERS
 
 # Copy & Uncomment the last line, if you want to add folders to sync

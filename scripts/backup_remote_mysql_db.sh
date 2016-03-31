@@ -3,6 +3,8 @@ source _load_config.sh
 
 echo "-------------------------------------"
 echo "+ Creating backup of mysql database +"
+echo "+ Existing tables will be dropped   +"
+echo "+ on house.local                    +"
 echo "-------------------------------------"
 
 REQUIRED_PARAMETER=(REMOTE_SQL_DB REMOTE_SSH_PORT REMOTE_SSH_USER REMOTE_HOST LOCAL_MYSQL_USER LOCAL_MYSQL_PASS LOCAL_MYSQL_HOST LOCAL_MYSQL_DB)
@@ -16,11 +18,19 @@ REMOTE_FILE=${REMOTE_TMP_DIR}${FILENAME}
 LOCAL_TMP_DIR="/tmp/"
 LOCAL_FILE=${LOCAL_TMP_DIR}${FILENAME}
 
+IGNORED_TABLES_STRING=''
+for TABLE in "${EXCLUDED_TABLES[@]}"
+do :
+   IGNORED_TABLES_STRING+=" --ignore-table=${REMOTE_SQL_DB}.${TABLE}"
+done
+
 # connect to remote host and create backup
 ssh -T -p ${REMOTE_SSH_PORT} ${REMOTE_SSH_USER}@${REMOTE_HOST} <<EOSSH
 echo "  database: ${REMOTE_SQL_DB}"
+echo "  ignoring tables: ${EXCLUDED_TABLES[@]}"
 
-mysqldump -u${REMOTE_SQL_USER} -p${REMOTE_SQL_PASS} -h${REMOTE_SQL_HOST} ${REMOTE_SQL_DB} > ${REMOTE_FILE}
+mysqldump -u${REMOTE_SQL_USER} -p${REMOTE_SQL_PASS} -h${REMOTE_SQL_HOST} --single-transaction --no-data ${REMOTE_SQL_DB} > ${REMOTE_FILE}
+mysqldump -u${REMOTE_SQL_USER} -p${REMOTE_SQL_PASS} -h${REMOTE_SQL_HOST} ${IGNORED_TABLES_STRING} ${REMOTE_SQL_DB} >> ${REMOTE_FILE}
 echo "  zipping ${REMOTE_FILE}"
 gzip ${REMOTE_FILE}
 EOSSH
