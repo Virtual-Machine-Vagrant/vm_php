@@ -16,10 +16,6 @@ install_php() {
 	source /etc/profile.d/phpbrew.sh
 
 	PHP_MODULES="+default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip"
-	if [ $PHP_VERSION_MM == 5.5 ] || [ $PHP_VERSION_MM == 5.6 ]
-	then
-	   PHP_MODULES="$PHP_MODULES +opcache"
-	fi
 
 	phpbrew install --jobs=$JOBS --no-clean $PHPVERSION $PHP_MODULES -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
 	echo "---------------------------------------------"
@@ -75,7 +71,10 @@ install_php() {
 	echo "---------------------------------------------"
 	if [ $PHP_VERSION_MM == 5.5 ] || [ $PHP_VERSION_MM == 5.6 ]
 	then
-	   install_php_ext opcache
+	   	LINE="zend_extension=/opt/zendguard/php$PHP_VERSION_MM/opcache.so"
+		FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/11-opcache.ini
+		touch $FILE
+		grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 	fi
 }
 
@@ -96,6 +95,8 @@ switch_php() {
 	echo "---------------------------------------------"
 	echo "switching to php-version $1"
 	echo "---------------------------------------------"
+		rm /var/www/house.local/status.html
+		ln -s /opt/phpbrew/php/${HOUSE_PHP_ACTIVE_VERSION}/php/php/fpm/status.html /var/www/house.local/status.html
         phpbrew fpm stop
 		phpbrew switch $1
         phpbrew fpm start

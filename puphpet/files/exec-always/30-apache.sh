@@ -18,6 +18,40 @@ echo ---------------------------------------------
 echo Copy Apache Config
 echo ---------------------------------------------
 
+rm 25-vhost_house_local.conf
+cat <<EOT >> /etc/apache2/sites-available/25-vhost_house_local.conf
+<VirtualHost *:80>
+   ServerName house.local
+   ServerAlias www.house.local
+
+   ## Vhost docroot
+   DocumentRoot "/var/www/house.local"
+
+   <Directory "/var/www/house.local">
+     Options Indexes FollowSymlinks MultiViews
+     AllowOverride All
+     Require all granted
+
+     <FilesMatch "\.php$">
+       Require all granted
+       SetHandler proxy:fcgi://127.0.0.1:9000
+     </FilesMatch>
+   </Directory>
+  <LocationMatch "/(ping|status)$">
+   Options Indexes
+   Require all granted
+   SetHandler proxy:fcgi://127.0.0.1:9000
+  </LocationMatch>
+   ErrorLog "/var/log/apache2/vhost_house_local_error.log"
+   ServerSignature Off
+   CustomLog "/var/log/apache2/vhost_house_local_access.log" combined
+
+   ## SetEnv/SetEnvIf for environment variables
+   SetEnv APP_ENV dev
+   SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+ </VirtualHost>
+EOT
+
  cat <<EOT >> /etc/apache2/sites-available/30-dynamic-vhost.conf
   <Directory "/var/www">
    AllowOverride All

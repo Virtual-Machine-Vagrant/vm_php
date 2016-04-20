@@ -63,6 +63,7 @@ function getProjectFolders()
                 <li class=""><a href="http://house.local:8025">Mailhog</a></li>
                 <li class=""><a href="/info.php">PHP Info</a></li>
                 <li class=""><a href="/gd.php">PHP GD Info</a></li>
+                <li class=""><a href="/status.html">PHP Status</a></li>
             </ul>
         </nav>
     </div>
@@ -125,7 +126,9 @@ function getProjectFolders()
                 echo '<div class="media"><div class="media-left media-middle">';
                 echo '<a href="' . $project['url'] . '">';
                 if ($project['icon']) {
-                    echo '<img class="media-object" src="' . $project['icon'] . '" alt="' . $project['title'] . '" data-pin-nopin="true">';
+                    echo '<img class="media-object" style="width: 32px;" src="' . $project['icon'] . '" alt="' . $project['title'] . '" data-pin-nopin="true">';
+                } else {
+                    echo '<span style="width: 32px; display: block;"></span>';
                 }
                 echo '</div>';
                 echo '<div class="media-body"><h4 class="media-heading">' . $project['title'] . '</h4></a></div></div>';

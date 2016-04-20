@@ -40,6 +40,9 @@ echo "  Copying ${REMOTE_FILE}.gz file to local system ${LOCAL_TMP_DIR}"
 scp -P${REMOTE_SSH_PORT} ${REMOTE_SSH_USER}@${REMOTE_HOST}:${REMOTE_FILE}.gz ${LOCAL_TMP_DIR}
 gunzip ${LOCAL_FILE}.gz
 
+# sed definer from sql-file
+sed -i 's/DEFINER=[^*]*\*/\*/g' ${LOCAL_FILE}
+
 # import file to mysql
 echo "  Importing ${LOCAL_FILE}"
 mysql -u${LOCAL_MYSQL_USER} -p${LOCAL_MYSQL_PASS} -h${LOCAL_MYSQL_HOST} ${LOCAL_MYSQL_DB} < ${LOCAL_FILE}
