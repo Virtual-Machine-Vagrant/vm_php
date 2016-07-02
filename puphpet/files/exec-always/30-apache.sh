@@ -1,5 +1,12 @@
 #!/bin/sh
 echo ---------------------------------------------
+echo Setting Apache User to vagrant
+echo ---------------------------------------------
+sed -i "s/^\(User\s*\).*\$/\1$REPLACE/" /etc/apache2/apache2.conf
+sed -i "s/^\(Group\s*\).*\$/\1$REPLACE/" /etc/apache2/apache2.conf
+service apache2 restart
+
+echo ---------------------------------------------
 echo Enabling Apache Modules
 echo ---------------------------------------------
 a2enmod headers
@@ -60,6 +67,7 @@ EOT
  <VirtualHost *:80>
    ServerName house.local
    ServerAlias *.local
+   ServerAlias *.local.pttde.de
    VirtualDocumentRoot "/var/www/%0/web"
 
    <Directory "/var/www/%0">
