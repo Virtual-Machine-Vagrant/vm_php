@@ -118,10 +118,17 @@ install_zendguardAndIoncube() {
 	rm ioncube_loaders_lin_x86-64.tar.gz
 }
 
+setUserAndGroupForFPM() {
+	REPLACE="vagrant"
+	sed -i "s/^\(user\s*=\s*\).*\$/\1$REPLACE/" /opt/phpbrew/php/$1/etc/php-fpm.conf
+	sed -i "s/^\(group\s*=\s*\).*\$/\1$REPLACE/" /opt/phpbrew/php/$1/etc/php-fpm.conf
+}
+
 service php5-fpm stop
 install_zendguardAndIoncube
 for i in ${HOUSE_PHP_VERSIONS[@]}; do
 	install_php $i
+	setUserAndGroupForFPM $i
 done
 
 switch_php ${HOUSE_PHP_ACTIVE_VERSION}

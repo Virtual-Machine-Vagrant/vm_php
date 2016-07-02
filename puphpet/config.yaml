@@ -14,6 +14,9 @@ vagrantfile:
                 vflnp_fs39hgrzn0z0:
                     host: '7822'
                     guest: '22'
+                house_local_mysql:
+                    host: '3306'
+                    guest: '3306'
         post_up_message: ''
         provider:
             virtualbox:
@@ -36,7 +39,7 @@ vagrantfile:
         synced_folder:
             vflsf_ocy4q7ab7cse:
                 source: ./www
-                target: /var/www
+                target: /var/www-nfs
                 sync_type: nfs
                 smb:
                     smb_host: ''
