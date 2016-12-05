@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 source /vagrant/config.sh
 install_php() {
 	PHPVERSION=$1
@@ -8,16 +8,16 @@ install_php() {
 	JOBS=$(nproc)
 
 	echo "---------------------------------------------"
-	echo "installation of php via homebrew"
+	echo "installation of php via phpbrew"
 	echo "VERSION: $PHP_VERSION_MM ($PHPVERSION)"
 	echo "MAJOR VERSION: $PHP_MAJOR_VERSION"
 	echo "MINOR VERSION: $PHP_MINOR_VERSION"
 	echo "---------------------------------------------"
 	source /etc/profile.d/phpbrew.sh
 
-	PHP_MODULES="+default +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip"
+	PHP_MODULES="+default +curl +fpm +dbs +iconv +ipv6 +mcrypt +openssl +soap +intl +gd=shared +mysql +ftp +session +zip"
 
-	phpbrew install --jobs=$JOBS --no-clean $PHPVERSION $PHP_MODULES -- --with-mysql-sock=/var/run/mysqld/mysqld.sock
+	phpbrew install --jobs=$JOBS --no-clean $PHPVERSION $PHP_MODULES -- --with-mysql-sock=/var/run/mysqld/mysqld.sock --with-fpm-user=vagrant --with-fpm-group=vagrant
 	echo "---------------------------------------------"
 	echo "switching to php-version $PHPVERSION"
 	echo "---------------------------------------------"
@@ -58,13 +58,18 @@ install_php() {
 	touch $FILE
 	grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 
-	echo "---------------------------------------------"
-	echo "installing extension: zend guard loader"
-	echo "---------------------------------------------"
-	LINE="zend_extension=/opt/zendguard/php$PHP_VERSION_MM/ZendGuardLoader.so"
-	FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/10-zendguardloader.ini
-	touch $FILE
-	grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+
+	ZENDGUARDFILE=/opt/zendguard/php$PHP_VERSION_MM/ZendGuardLoader.so
+	if [ -f "$ZENDGUARDFILE" ]
+	then
+		echo "---------------------------------------------"
+		echo "installing extension: zend guard loader"
+		echo "---------------------------------------------"
+		LINE="zend_extension=/opt/zendguard/php$PHP_VERSION_MM/ZendGuardLoader.so"
+		FILE=/opt/phpbrew/php/php-$PHPVERSION/var/db/10-zendguardloader.ini
+		touch $FILE
+		grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+	fi
 
 	echo "---------------------------------------------"
 	echo "installing extension: opcache"
@@ -119,12 +124,34 @@ install_zendguardAndIoncube() {
 }
 
 setUserAndGroupForFPM() {
+	PHPVERSION=$1
+	PHP_MAJOR_VERSION=$(echo $PHPVERSION| cut -d'.' -f 1)
+	PHP_MINOR_VERSION=$(echo $PHPVERSION| cut -d'.' -f 2)
+	PHP_VERSION_MM=$PHP_MAJOR_VERSION.$PHP_MINOR_VERSION
+
+	echo "---------------------------------------------"
+	echo "Setting user and group for php-fpm"
+	echo "---------------------------------------------"
+
+	FILE=/opt/phpbrew/php/php-$1/etc/php-fpm.conf
+	if [ -f "$FILE" ]
+		then
+			FILE=/opt/phpbrew/php/php-$1/etc/php-fpm.conf
+		else
+			FILE=/opt/phpbrew/php/php-$1/etc/php-fpm.d/www.conf	
+	fi		
+	
 	REPLACE="vagrant"
-	sed -i "s/^\(user\s*=\s*\).*\$/\1$REPLACE/" /opt/phpbrew/php/$1/etc/php-fpm.conf
-	sed -i "s/^\(group\s*=\s*\).*\$/\1$REPLACE/" /opt/phpbrew/php/$1/etc/php-fpm.conf
+	sed -i "s/^\(user\s*=\s*\).*\$/\1$REPLACE/" $FILE
+	sed -i "s/^\(group\s*=\s*\).*\$/\1$REPLACE/" $FILE
+	echo "---------------------------------------------"
+	echo "Setting listen to port 9000"
+	echo "---------------------------------------------"		
+	REPLACE="9000"
+	sed -i "s/^\(listen\s*=\s*\).*\$/\1$REPLACE/" $FILE
 }
 
-service php5-fpm stop
+service php7.1-fpm stop
 install_zendguardAndIoncube
 for i in ${HOUSE_PHP_VERSIONS[@]}; do
 	install_php $i
