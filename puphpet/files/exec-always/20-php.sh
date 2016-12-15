@@ -151,11 +151,33 @@ setUserAndGroupForFPM() {
 	sed -i "s/^\(listen\s*=\s*\).*\$/\1$REPLACE/" $FILE
 }
 
+setPhpIniValues() {
+	PHPVERSION=$1
+	PHP_MAJOR_VERSION=$(echo $PHPVERSION| cut -d'.' -f 1)
+	PHP_MINOR_VERSION=$(echo $PHPVERSION| cut -d'.' -f 2)
+	PHP_VERSION_MM=$PHP_MAJOR_VERSION.$PHP_MINOR_VERSION
+
+	echo "---------------------------------------------"
+	echo "Setting php.ini sendmail_path to use mailhog"
+	echo "---------------------------------------------"
+	FILE=/opt/phpbrew/php/php-$1/etc/php.ini
+	REPLACE="mailhog sendmail -t -i"
+	sed -i "s/^\(sendmail_path\s*=\s*\).*\$/\1$REPLACE/" $FILE
+
+	echo "---------------------------------------------"
+	echo "Setting php.ini smtp-port to mailhog 1025"
+	echo "---------------------------------------------"	
+	REPLACE="1025"
+	sed -i "s/^\(smtp_port\s*=\s*\).*\$/\1$REPLACE/" $FILE
+
+}
+
 service php7.1-fpm stop
 install_zendguardAndIoncube
 for i in ${HOUSE_PHP_VERSIONS[@]}; do
 	install_php $i
 	setUserAndGroupForFPM $i
+	setPhpIniValues $i
 done
 
 switch_php ${HOUSE_PHP_ACTIVE_VERSION}
