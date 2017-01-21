@@ -52,6 +52,36 @@ cat <<EOT >> /etc/apache2/sites-available/25-vhost_house_local.conf
    SetEnv APP_ENV dev
    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
  </VirtualHost>
+ <VirtualHost *:443>
+   ServerName house.local
+   ServerAlias www.house.local
+
+   ## Vhost docroot
+   DocumentRoot "/var/www/house.local"
+
+   <Directory "/var/www/house.local">
+     Options Indexes FollowSymlinks MultiViews
+     AllowOverride All
+     Require all granted
+
+     <FilesMatch "\.php$">
+       Require all granted
+       SetHandler proxy:fcgi://127.0.0.1:9000
+     </FilesMatch>
+   </Directory>
+  <LocationMatch "/(ping|status)$">
+   Options Indexes
+   Require all granted
+   SetHandler proxy:fcgi://127.0.0.1:9000
+  </LocationMatch>
+   ErrorLog "/var/log/apache2/vhost_house_local_error.log"
+   ServerSignature Off
+   CustomLog "/var/log/apache2/vhost_house_local_access.log" combined
+
+   ## SetEnv/SetEnvIf for environment variables
+   SetEnv APP_ENV dev
+   SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+ </VirtualHost>
 EOT
 
  cat <<EOT >> /etc/apache2/sites-available/30-dynamic-vhost.conf
@@ -60,6 +90,31 @@ EOT
    Allow from All
  </Directory>
  <VirtualHost *:80>
+   ServerName house.local
+   ServerAlias *.local
+   ServerAlias *.local.pttde.de
+   VirtualDocumentRoot "/var/www/%0/web"
+
+   <Directory "/var/www/%0">
+     Options Indexes FollowSymlinks MultiViews
+     Require all granted
+   </Directory>
+   <FilesMatch "\.php$">
+     Require all granted
+     SetHandler proxy:fcgi://127.0.0.1:9000
+   </FilesMatch>
+
+   ## Logging
+   ErrorLog "/var/log/apache2/error.log"
+   CustomLog "/var/log/apache2/access.log" combined
+
+   ## SetEnv/SetEnvIf for environment variables
+   SetEnv APP_ENV dev
+   SetEnv SHOPWARE_ENV local
+   SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+   ## Custom fragment
+ </VirtualHost>
+ <VirtualHost *:443>
    ServerName house.local
    ServerAlias *.local
    ServerAlias *.local.pttde.de

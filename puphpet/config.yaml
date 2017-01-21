@@ -28,6 +28,9 @@ vagrantfile:
                                 vflmnfp_dg3g69l4ez4i:
                                     host: '2122'
                                     guest: '22'
+                                mysql_port:
+                                    host: '3306'
+                                    guest: '3306'
                         memory: '1024'
                         cpus: '2'
         provision:
