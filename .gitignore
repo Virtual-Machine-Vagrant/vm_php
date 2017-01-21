@@ -4,3 +4,4 @@ scripts/config/*.sh
 !www/house.local
 www/
 .vagrant/
+puphpet/files/dot/ssh
