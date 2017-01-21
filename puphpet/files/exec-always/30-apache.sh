@@ -2,20 +2,15 @@
 echo ---------------------------------------------
 echo Setting Apache User to vagrant
 echo ---------------------------------------------
-sed -i "s/^\(User\s*\).*\$/\1$REPLACE/" /etc/apache2/apache2.conf
-sed -i "s/^\(Group\s*\).*\$/\1$REPLACE/" /etc/apache2/apache2.conf
+APACHEUSER=vagrant
+APACHEGROUP=vagrant
+sed -i "s/^\(User\s*\).*\$/\1$APACHEUSER/" /etc/apache2/apache2.conf
+sed -i "s/^\(Group\s*\).*\$/\1$APACHEGROUP/" /etc/apache2/apache2.conf
 service apache2 restart
-
-echo ---------------------------------------------
-echo Enabling Apache Modules
-echo ---------------------------------------------
-a2enmod headers
-a2enmod vhost_alias
 
 echo ---------------------------------------------
 echo Fixing split-logfile
 echo ---------------------------------------------
-
 cd /usr/sbin
 rm /usr/sbin/split-logfile
 wget https://raw.githubusercontent.com/omnigroup/Apache/master/httpd/support/split-logfile.in
@@ -25,7 +20,7 @@ echo ---------------------------------------------
 echo Copy Apache Config
 echo ---------------------------------------------
 
-rm 25-vhost_house_local.conf
+rm /etc/apache2/sites-available/25-vhost_house_local.conf
 cat <<EOT >> /etc/apache2/sites-available/25-vhost_house_local.conf
 <VirtualHost *:80>
    ServerName house.local

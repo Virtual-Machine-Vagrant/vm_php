@@ -1,5 +1,4 @@
-#!/bin/sh
-# system wide installation of phpbrew
+#!/bin/bash
 echo "---------------------------------------------"
 echo "Downloading phpbrew"
 echo "---------------------------------------------"
@@ -11,9 +10,12 @@ mv phpbrew /usr/local/bin/phpbrew
 echo "---------------------------------------------"
 echo "Settings phpbrew paths"
 echo "---------------------------------------------"
-LINE="export PHPBREW_ROOT=/opt/phpbrew"
+
 FILE=/etc/profile.d/phpbrew.sh
 touch $FILE
+LINE="#!/bin/bash"
+grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+LINE="export PHPBREW_ROOT=/opt/phpbrew"
 grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 LINE="export PHPBREW_HOME=/opt/phpbrew"
 grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
@@ -25,7 +27,7 @@ echo "Initializing phpbrew"
 echo "---------------------------------------------"
 phpbrew init
 
-LINE="source /opt/phpbrew/bashrc"
 FILE=/etc/profile.d/phpbrew.sh
+LINE="source /opt/phpbrew/bashrc"
 grep -q "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 source /etc/profile.d/phpbrew.sh

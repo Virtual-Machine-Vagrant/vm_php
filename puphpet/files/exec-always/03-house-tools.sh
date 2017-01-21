@@ -1,7 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 rm -rf /var/www/html
 HOUSE_PATH=/var/www/house.local
 HOUSE_TOOLS_PATH=/var/www/house.local/tools
+echo "---------------------------------------------"
+echo "House Web Interface"
+echo "---------------------------------------------"
+cp -r /var/www-nfs/www/house.local /var/www
+
 echo "---------------------------------------------"
 echo "Installing tools into $HOUSE_TOOLS_PATH"
 echo "---------------------------------------------"
@@ -18,9 +23,6 @@ git clone https://github.com/royrusso/elasticsearch-HQ.git > /dev/null 2>&1
 echo "---------------------------------------------"
 echo "MongoDB: Installing "
 echo "---------------------------------------------"
-
-
-
 MONGODB_PATH=$HOUSE_TOOLS_PATH/mongoWebAdmin
 mkdir -p $MONGODB_PATH
 cd $MONGODB_PATH
@@ -39,3 +41,4 @@ echo "---------------------------------------------"
 echo "Beanstalk Web Interface"
 echo "---------------------------------------------"
 composer create-project ptrofimov/beanstalk_console -s dev ${HOUSE_TOOLS_PATH}/beanstalk
+
