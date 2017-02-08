@@ -6,7 +6,6 @@ source /vagrant/config.sh
 echo "Required PHP versions: ${HOUSE_PHP_VERSIONS[*]}"
 echo "Active PHP version: $HOUSE_PHP_ACTIVE_VERSION"
 
-
 echo "---------------------------------------------"
 echo "Enabling password authentication via ssh"
 echo "---------------------------------------------"

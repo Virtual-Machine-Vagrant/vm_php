@@ -15,12 +15,6 @@ mkdir -p $HOUSE_TOOLS_PATH
 ln -s $HOUSE_TOOLS_PATH /var/www/html
 
 echo "---------------------------------------------"
-echo "Elasticsearch: Installing elasticsearch HQ"
-echo "---------------------------------------------"
-cd $HOUSE_TOOLS_PATH
-git clone https://github.com/royrusso/elasticsearch-HQ.git > /dev/null 2>&1
-
-echo "---------------------------------------------"
 echo "MongoDB: Installing "
 echo "---------------------------------------------"
 MONGODB_PATH=$HOUSE_TOOLS_PATH/mongoWebAdmin
@@ -41,4 +35,3 @@ echo "---------------------------------------------"
 echo "Beanstalk Web Interface"
 echo "---------------------------------------------"
 composer create-project ptrofimov/beanstalk_console -s dev ${HOUSE_TOOLS_PATH}/beanstalk
-
